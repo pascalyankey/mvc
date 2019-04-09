@@ -11,19 +11,26 @@ namespace MVC_Cultuurhuis.Controllers
     public class HomeController : Controller
     {
         private CultuurService db = new CultuurService();
-        public ActionResult Index(int? id)
+        public ActionResult Index(int? gekozenGenre = null)
         {
-            var voorstellingenViewModel = new VoorstellingenViewModel();
-            voorstellingenViewModel.Genres = db.GetAllGenres();
-            voorstellingenViewModel.Voorstellingen = db.GetAlleVoorstellingenVanGenre(id);
-            voorstellingenViewModel.Genre = db.GetGenre(id);
-
             if (Session.Keys.Count != 0)
                 ViewBag.mandjeTonen = true;
             else
                 ViewBag.mandjeTonen = false;
 
-            return View(voorstellingenViewModel);
+            return View(gekozenGenre);
+        }
+
+        public PartialViewResult GenreLijst(int? gekozenGenre)
+        {
+            ViewBag.GekozenGenre = gekozenGenre;
+            return PartialView(db.GetAllGenres());
+        }
+
+        public PartialViewResult GetVoorstellingenVanGenre(int? gekozenGenre)
+        {
+            var voorstellingen = db.GetAlleVoorstellingenVanGenre(gekozenGenre);
+            return PartialView(voorstellingen);
         }
 
         public ActionResult Reserveren(int id)
@@ -50,6 +57,20 @@ namespace MVC_Cultuurhuis.Controllers
 
         public ActionResult Mandje()
         {
+            return View();
+        }
+
+        public PartialViewResult MandjeItemsLijst()
+        {
+            string[] formKeys = Request.Form.AllKeys;
+            if (formKeys != null)
+            {
+                foreach (var item in formKeys)
+                {
+                    if (Session[item] != null) Session.Remove(item);
+                }
+            }
+
             decimal teBetalen = 0;
             var mandjeItems = new List<MandjeItem>();
 
@@ -68,8 +89,9 @@ namespace MVC_Cultuurhuis.Controllers
                 }
             }
             ViewBag.teBetalen = teBetalen;
-            return View(mandjeItems);
+            return PartialView(mandjeItems);
         }
+
         [HttpPost]
         public ActionResult Verwijderen()
         {

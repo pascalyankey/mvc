@@ -1,6 +1,10 @@
-﻿@model List<MVC_Cultuurhuis.Models.MandjeItem>
-@{ 
+﻿@{ 
     ViewBag.Title = "Mandje";
+    var ajaxOpts = new AjaxOptions
+    {
+        UpdateTargetId = "update",
+        Url = Url.Action("MandjeItemsLijst")
+    };
 }
 <div class="jumbotron">
     <h1>Het Cultuurhuis <img src="~/Images/mandje.png" alt="winkelmandje" /></h1> 
@@ -10,7 +14,16 @@
     </p> 
 </div>
 <p class="lead alert alert-info">Inhoud van uw winkelmandje:</p>
-<form method="post" action="~/Home/Verwijderen">
+@using (Ajax.BeginForm("Mandje", ajaxOpts))
+{
+    <div id="update">
+        @Html.Action("MandjeItemsLijst")
+    </div>
+    <div>
+        <input type="submit" value="Selectie verwijderen" class="btn" />
+    </div>
+}
+@*<form method="post" action="~/Home/Verwijderen">
     <table class="table">
         <thead>
             <tr>
@@ -50,5 +63,5 @@
             </tr> 
         </tfoot>
     </table>
-</form>
+</form>*@
 <p class="alert alert-info">Te betalen: @(String.Format("{0:€ #,##0.00}", ViewBag.teBetalen))</p>
