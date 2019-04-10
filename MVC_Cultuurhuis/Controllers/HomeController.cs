@@ -67,7 +67,8 @@ namespace MVC_Cultuurhuis.Controllers
             {
                 foreach (var item in formKeys)
                 {
-                    if (Session[item] != null) Session.Remove(item);
+                    if (Session[item] != null)
+                        Session.Remove(item);
                 }
             }
 

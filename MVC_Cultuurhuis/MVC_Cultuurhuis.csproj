@@ -242,6 +242,7 @@
     <Content Include="Views\Home\Overzicht.cshtml" />
     <Content Include="Views\Home\GenreLijst.cshtml" />
     <Content Include="Views\Home\GetVoorstellingenVanGenre.cshtml" />
+    <Content Include="Views\Home\MandjeItemsLijst.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
